@@ -2,13 +2,12 @@ package com.kelin.photoselectordemo
 
 import android.app.Application
 import android.os.Build
-import coil.Coil
-import coil.ImageLoader
-import coil.ImageLoaderFactory
-import coil.decode.GifDecoder
-import coil.decode.ImageDecoderDecoder
-import coil.decode.VideoFrameDecoder
-import coil.imageLoader
+import coil3.ImageLoader
+import coil3.PlatformContext
+import coil3.SingletonImageLoader
+import coil3.gif.AnimatedImageDecoder
+import coil3.gif.GifDecoder
+import coil3.video.VideoFrameDecoder
 import com.kelin.photoselector.PhotoSelector
 
 /**
@@ -20,19 +19,19 @@ import com.kelin.photoselector.PhotoSelector
  *
  * **版本:** v 1.0.0
  */
-class App : Application(), ImageLoaderFactory {
+class App : Application(), SingletonImageLoader.Factory {
 
     override fun onCreate() {
         super.onCreate()
         PhotoSelector.init(this,"${packageName}.fileProvider", true, albumTakePictureEnable = false)
     }
 
-    override fun newImageLoader(): ImageLoader {
+    override fun newImageLoader(context:PlatformContext): ImageLoader {
         return ImageLoader.Builder(this)
             .components {
                 //添加GIF支持
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                    add(ImageDecoderDecoder.Factory())
+                    add(AnimatedImageDecoder.Factory())
                 } else {
                     add(GifDecoder.Factory())
                 }

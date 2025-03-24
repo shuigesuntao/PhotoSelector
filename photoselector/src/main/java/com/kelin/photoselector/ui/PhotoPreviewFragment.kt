@@ -9,8 +9,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
-import coil.imageLoader
-import coil.request.ImageRequest
+import coil3.imageLoader
+import coil3.request.ImageRequest
+import coil3.request.error
 import com.kelin.photoselector.PhotoSelector
 import com.kelin.photoselector.R
 import com.kelin.photoselector.databinding.FragmentKelinPhotoSelectorPhotoPreviewBinding

@@ -4,10 +4,14 @@ import android.Manifest
 import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.lifecycle.LifecycleOwner
 import com.kelin.okpermission.OkPermission
 import com.kelin.photoselector.MutablePhotoCallabck
 import com.kelin.photoselector.PhotoSelector
+import com.kelin.photoselector.PhotoSelector.ID_REPEATABLE
+import com.kelin.photoselector.PhotoSelector.ID_SINGLE
 import com.kelin.photoselector.SinglePhotoCallback
+import com.kelin.photoselector.cache.DistinctManager
 import com.kelin.photoselector.model.AlbumType
 
 interface SelectorOption {
@@ -92,5 +96,8 @@ fun SelectorAlbumOption.select(callback: SinglePhotoCallback) {
  * @param callback 选择成功后的回调。
  */
 fun SelectorAlbumOption.selectAll(maxLength: Int = PhotoSelector.defMaxLength, callback: MutablePhotoCallabck) {
+    if (selectorId != ID_REPEATABLE && selectorId != ID_SINGLE && context is LifecycleOwner) {
+        (context as LifecycleOwner).lifecycle.addObserver(DistinctManager.instance.tryNewCache(selectorId))
+    }
     PhotoSelector.realOpenSelector(context, permissions, false, album, maxLength, if (maxLength == 1) PhotoSelector.ID_REPEATABLE else selectorId, maxSize, maxDuration, callback)
 }

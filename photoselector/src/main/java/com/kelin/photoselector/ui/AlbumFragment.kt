@@ -17,7 +17,9 @@ import androidx.loader.app.LoaderManager
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import coil.load
+import coil3.load
+import coil3.request.crossfade
+import coil3.request.placeholder
 import com.kelin.okpermission.OkActivityResult
 import com.kelin.photoselector.PhotoSelector
 import com.kelin.photoselector.R
@@ -396,10 +398,11 @@ internal class AlbumFragment : BasePhotoSelectorFragment<FragmentKelinPhotoSelec
         fun clearSelected() {
             selectedPictures.run {
                 if (isNotEmpty()) {
-                    initialSelected?.also { removeAll(it) }
+//                    initialSelected?.also { removeAll(it) }
+                    initialSelected?.toMutableList()?.clear()
                     val targetPositions = map { photoList.indexOf(it) }
                     clear()
-                    initialSelected?.also { addAll(it) }
+//                    initialSelected?.also { addAll(it) }
                     targetPositions.forEach {
                         notifyItemChanged(it + albumOffset)
                     }
@@ -449,9 +452,9 @@ internal class AlbumFragment : BasePhotoSelectorFragment<FragmentKelinPhotoSelec
                 } else {
                     null
                 }
-                isEnabled = canOperation
+//                isEnabled = canOperation
             }
-            vb.rlKelinPhotoSelectorChecker.isEnabled = canOperation
+//            vb.rlKelinPhotoSelectorChecker.isEnabled = canOperation
             vb.tvKelinPhotoSelectorVideoDuration.apply {
                 visibility = if (data.type == PictureType.VIDEO) {
                     text = data.duration

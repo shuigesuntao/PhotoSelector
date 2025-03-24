@@ -7,7 +7,8 @@ import android.os.Bundle
 import android.view.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import coil.load
+import coil3.load
+import coil3.request.placeholder
 import com.kelin.photoselector.R
 import com.kelin.photoselector.databinding.HolderKelinPhotoSelectorAlbumBinding
 import com.kelin.photoselector.model.Album

@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
 android {
-    compileSdk 34
+    compileSdk 35
 
     buildFeatures{
         viewBinding true
@@ -11,7 +11,7 @@ android {
     defaultConfig {
         applicationId "com.kelin.photoselector"
         minSdkVersion 21
-        targetSdkVersion 33
+        targetSdkVersion 35
         versionCode 101
         versionName "1.0.1"
 

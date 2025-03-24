@@ -9,7 +9,8 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import coil.load
+import coil3.load
+import coil3.request.crossfade
 import com.kelin.photoselector.PhotoSelector
 import com.kelin.photoselector.model.PhotoImpl
 import com.kelin.photoselectordemo.databinding.HolderImageBinding

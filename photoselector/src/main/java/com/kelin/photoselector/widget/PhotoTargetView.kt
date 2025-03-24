@@ -11,8 +11,11 @@ import android.view.View
 import android.widget.ProgressBar
 import android.widget.RelativeLayout
 import androidx.appcompat.widget.AppCompatImageView
-import coil.drawable.ScaleDrawable
-import coil.target.Target
+import coil3.Image
+import coil3.asDrawable
+import coil3.gif.MovieDrawable
+import coil3.size.ScaleDrawable
+import coil3.target.Target
 import com.github.chrisbanes.photoview.PhotoView
 import com.kelin.photoselector.databinding.ViewKelinPhotoSelectorPhotoTargetViewBinding
 
@@ -80,28 +83,29 @@ class PhotoTargetView @JvmOverloads constructor(context: Context, attrs: Attribu
     }
 
     inner class PhotoTarget(private val target: PhotoTargetView) : Target {
-        override fun onError(error: Drawable?) {
+        override fun onError(error: Image?) {
             target.progressBar.visibility = View.GONE
             target.imageView.visibility = View.GONE
             target.defImageView.apply {
-                setImageDrawable(error)
+                setImageDrawable(error?.asDrawable(resources))
                 visibility = View.VISIBLE
             }
         }
 
-        override fun onSuccess(result: Drawable) {
+        override fun onSuccess(result: Image) {
             target.progressBar.visibility = View.GONE
-            if (result is ScaleDrawable) {
+            val drawable = result.asDrawable(resources)
+            if (drawable is ScaleDrawable) {
                 target.imageView.visibility = View.GONE
                 target.defImageView.apply {
-                    setImageDrawable(result)
-                    result.start()
+                    setImageDrawable(drawable)
+                    drawable.start()
                     visibility = View.VISIBLE
                 }
             } else {
                 target.defImageView.visibility = View.GONE
                 target.imageView.apply {
-                    setImageDrawable(result)
+                    setImageDrawable(drawable)
                     visibility = View.VISIBLE
                 }
             }
