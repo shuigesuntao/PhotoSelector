@@ -61,8 +61,9 @@ dependencies {
     //ViewPager2
     implementation "androidx.viewpager2:viewpager2:1.1.0"
     //ExoPlayer视频播放器
-    implementation "com.google.android.exoplayer:exoplayer-core:$exoplayer_version"
-    implementation "com.google.android.exoplayer:exoplayer-ui:$exoplayer_version"
+    implementation "androidx.media3:media3-exoplayer:$exoplayer_version"
+    implementation "androidx.media3:media3-ui:$exoplayer_version"
+    implementation "androidx.media3:media3-common:$exoplayer_version"
 }
 
 // 指定编码

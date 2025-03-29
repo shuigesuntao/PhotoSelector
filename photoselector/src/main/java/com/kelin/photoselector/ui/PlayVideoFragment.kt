@@ -8,14 +8,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import com.google.android.exoplayer2.ExoPlayer
-import com.google.android.exoplayer2.MediaItem
-import com.google.android.exoplayer2.PlaybackException
-import com.google.android.exoplayer2.Player
-import com.google.android.exoplayer2.source.ProgressiveMediaSource
-import com.google.android.exoplayer2.upstream.DefaultDataSource
-import com.google.android.exoplayer2.util.EventLogger
-import com.google.android.exoplayer2.util.Log
+import androidx.annotation.OptIn
+import androidx.media3.common.MediaItem
+import androidx.media3.common.PlaybackException
+import androidx.media3.common.Player
+import androidx.media3.common.util.Log
+import androidx.media3.common.util.UnstableApi
+import androidx.media3.datasource.DefaultHttpDataSource
+import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.exoplayer.source.ProgressiveMediaSource
+import androidx.media3.exoplayer.util.EventLogger
+import androidx.media3.ui.PlayerView
 import com.kelin.photoselector.databinding.FragmentKelinPhotoSelectorPlayVideoBinding
 import java.io.File
 
@@ -61,40 +64,26 @@ internal class PlayVideoFragment : BasePhotoSelectorFragment<FragmentKelinPhotoS
         return  FragmentKelinPhotoSelectorPlayVideoBinding.inflate(inflater, container, attachToParent)
     }
 
+    @OptIn(UnstableApi::class)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         exoPlayer.apply {
             addAnalyticsListener(EventLogger())
             addListener(playerEventListener)
             playWhenReady = true
-            setMediaSource(
-                ProgressiveMediaSource.Factory{
-                    DefaultDataSource(view.context, "exoplayer-codelab", false)
-                }.createMediaSource(MediaItem.fromUri(uri))
-            )
+            addMediaItem(MediaItem.fromUri(uri))
+//            setMediaSource(
+//                ProgressiveMediaSource.Factory(
+//                    DefaultHttpDataSource.Factory()
+//                        .setUserAgent("exoplayer-codelab")
+//                        .setAllowCrossProtocolRedirects(false)
+//                ).createMediaSource()
+//            )
             prepare()
         }
         vb.pvKelinPhotoSelectorVideoPlayer.run {
             player = exoPlayer
-            try {
-                val controller = javaClass.getDeclaredField("controller").let {
-                    it.isAccessible = true
-                    it.get(this)
-                }
-                controller.javaClass.getDeclaredField("playPauseButton").let {
-                    it.isAccessible = true
-                    it.get(controller)as View
-                }.setOnClickListener {
-                    controller.javaClass.getDeclaredMethod("dispatchPlayPause", Player::class.java).also { method ->
-                        val state = exoPlayer.playbackState
-                        val wantPlay = state == Player.STATE_IDLE || state == Player.STATE_ENDED || !exoPlayer.playWhenReady
-                        manualPause = !(wantPlay)
-                        method.isAccessible = true
-                        method.invoke(controller, exoPlayer)
-                        Log.d("VideoPlayer", "${wantPlay}|${state == Player.STATE_IDLE || state == Player.STATE_ENDED || !exoPlayer.playWhenReady}|${exoPlayer.isPlaying}")
-                    }
-                }
-            } catch (_: Exception) { }
+
         }
     }
 
